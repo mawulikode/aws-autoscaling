@@ -10,7 +10,7 @@ Errors or corrections? Contact [mawulidenteh@gmail.com](mailto:mawulidenteh@gmai
 <!--Final rev. for launch Oct 2020-->
 
 ## Architecture Diagram
-![]()
+![](/images/autoscale-diagram-Page-1.drawio2.png)
 
 
 ## Create a VPC
