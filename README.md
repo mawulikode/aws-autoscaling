@@ -52,7 +52,7 @@ The launch template will serve as the blueprint for creating the exact type of s
 14. Under **Advanced details**, scroll down to the **User data** section and enter the following lines of code exactly as shown
 
 ```
-#!/bin/bash -ex
+#!/bin/bash
 sudo su
 yum -y update
 yum install httpd -y
