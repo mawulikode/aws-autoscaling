@@ -49,7 +49,7 @@ The launch template will serve as the blueprint for creating the exact type of s
 11. Under **Advanced network configuration**, choose **"Enable"** under **Auto-assign public IP**
 12. Under **Storage**, leave all other configuration as default and choose **"gp3"** for **Volume type**
 13. Resource tags: **Key: Name**, **Value: autoscale-webserver**
-14. Under **Advanced details**, scroll down to the **User data** section and enter the following lines of code exactly as shown
+14. Under **Advanced details**, scroll down to the **User data** section and enter the following lines of code exactly as shown (Works on Amazon Linux 2)
 
 ```
 #!/bin/bash -ex
