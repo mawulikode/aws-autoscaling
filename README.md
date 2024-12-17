@@ -5,13 +5,15 @@ This tutorial walks you through the process of creating web servers, managed by 
 
 Errors or corrections? Contact [mawulidenteh@gmail.com](mailto:mawulidenteh@gmail.com).
 
----
+<br>
+<br>
 
 
 ## Architecture Diagram
 ![](https://mawuli-share-bucket.s3.us-east-1.amazonaws.com/blog-demos/autoscaling/autoscale-diagram2-Page-1.png)
 
----
+<br>
+<br>
 
 ## 1. Create a VPC
 A VPC is an isolated, private network you can create to run your workloads. You have complete control over your VPC when you create one.
@@ -28,10 +30,13 @@ A VPC is an isolated, private network you can create to run your workloads. You 
 10. Leave all other settings as default.
 11. Click **Create VPC**.
 
+<br>
+
 ## Demo
 [![Watch the Demo on YouTube](https://img.youtube.com/vi/9MKsavNn_pQ/maxresdefault.jpg)](https://www.youtube.com/watch?v=9MKsavNn_pQ "Watch the Demo")
 
----
+<br>
+<br>
 
 ## 2. Create a Launch Template
 
@@ -51,6 +56,8 @@ The launch template will serve as the blueprint for creating the exact type of s
 12. Under **Storage**, leave all other configuration as default and choose **"gp3"** for **Volume type**.
 13. Resource tags: optional.
 14. Under **Advanced details**, scroll down to the **User data** section and enter the following lines of code exactly as shown:
+
+<br>
 
 ```
 #!/bin/bash
@@ -77,7 +84,8 @@ nohup /home/ec2-user/start_stress.sh > /home/ec2-user/start_stress.log 2>&1 &
 ## Demo
 [![Watch the Demo on YouTube](https://img.youtube.com/vi/J_a9zdVQRmo/maxresdefault.jpg)](https://www.youtube.com/watch?v=J_a9zdVQRmo "Watch the Demo")
 
----
+<br>
+<br>
 
 ## 3. Create Target Group
 A target group will route requests to the web servers we create. Our load balancer will need this target group to know what set of servers to distribute traffic to. Our auto scaling group will also be associated with this target group so it launches our servers into the target group.
@@ -95,7 +103,8 @@ A target group will route requests to the web servers we create. Our load balanc
 ## Demo
 [![Watch the Demo on YouTube](https://img.youtube.com/vi/d5Uzm132PpM/maxresdefault.jpg)](https://www.youtube.com/watch?v=d5Uzm132PpM "Watch the Demo")
 
----
+<br>
+<br>
 
 ## 4. Create Load Balancer
 An application load balancer acts as the entry point for traffic to our web servers. Instead of allowing users to access our application directly, we will use the load balancer to distribute traffic equally among our autoscaling group of web servers. This is better for load management, security and reliability of our application.
@@ -115,7 +124,8 @@ An application load balancer acts as the entry point for traffic to our web serv
 ## Demo
 [![Watch the Demo on YouTube](https://img.youtube.com/vi/JVyPOaC1QII/maxresdefault.jpg)](https://www.youtube.com/watch?v=JVyPOaC1QII "Watch the Demo")
 
----
+<br>
+<br>
 
 ## 5. Create Auto Scaling Group
 The auto scaling group configures and controls how your application scales automatically in response to varying traffic situations.
@@ -143,12 +153,16 @@ The auto scaling group configures and controls how your application scales autom
 ## Demo
 [![Watch the Demo on YouTube](https://img.youtube.com/vi/miOEZZcFtAI/maxresdefault.jpg)](https://www.youtube.com/watch?v=miOEZZcFtAI "Watch the Demo")
 
----
+<br>
+<br>
 
 Once you successfully create your autoscaling group, you should see two new instances in the EC2 console. This is because we specified a desired count of 2. Also note that they are automatically placed one in each AZ to support high availability.
 
+<br>
+
 ![](https://mawuli-share-bucket.s3.us-east-1.amazonaws.com/blog-demos/autoscaling/Screenshot+2024-12-17+at+10.02.02%E2%80%AFAM.png)
 
+<br>
 
 ## Restrict web traffic to servers
 
@@ -156,7 +170,6 @@ With the current design, users can directly access our web server using its IP a
 
 To ensure all incoming HTTP traffic goes through the load balancer, we will update the webserver security group to accept HTTP traffic only from our application load balancer security group.
 
-### Edit web server security group
 
 1. Go to the **autoscale-webserver-sg** security group and click on **Edit inbound rules**.
 2. Delete the existing HTTP rule.
@@ -164,7 +177,11 @@ To ensure all incoming HTTP traffic goes through the load balancer, we will upda
 4. You have successfully restricted traffic going to the servers to the load balancer.
 5. You should no longer be able to access your web server using the server IPs or DNS names. You should now be able to use the load balancer DNS name to access the servers. Test this out.
 
+<br>
+
 ![](https://mawuli-share-bucket.s3.us-east-1.amazonaws.com/blog-demos/autoscaling/Screenshot+2024-12-17+at+10.01.13%E2%80%AFAM.png)
+
+<br>
 
 ## Observing Autoscaling
 After launching the desired number of 2 instances, a bash script will run in the background to increase CPU utilization to 50%. This will trigger a scale out action.
@@ -174,6 +191,8 @@ This should lead to a maximum number of 4 instances being available to serve web
 When the script stops running, a scale in action should equally be triggered to reduce the instances back to the desired number.
 
 It takes about an hour to observe this.
+
+<br>
 
 ![](https://mawuli-share-bucket.s3.us-east-1.amazonaws.com/blog-demos/autoscaling/Screenshot+2024-12-17+at+4.37.21%E2%80%AFPM.png)
 
