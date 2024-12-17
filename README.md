@@ -30,10 +30,8 @@ A VPC is an isolated, private network you can create to run your workloads. You 
 10. Leave all other settings as default.
 11. Click **Create VPC**.
 
-<br>
-
 ## Demo
-[![Watch the Demo on YouTube](https://img.youtube.com/vi/9MKsavNn_pQ/maxresdefault.jpg)](https://www.youtube.com/watch?v=9MKsavNn_pQ "Watch the Demo")
+[![Watch on YouTube](https://img.youtube.com/vi/9MKsavNn_pQ/maxresdefault.jpg)](https://www.youtube.com/watch?v=9MKsavNn_pQ "Watch on YouTube")
 
 <br>
 <br>
@@ -82,7 +80,7 @@ nohup /home/ec2-user/start_stress.sh > /home/ec2-user/start_stress.log 2>&1 &
 ```
 
 ## Demo
-[![Watch the Demo on YouTube](https://img.youtube.com/vi/J_a9zdVQRmo/maxresdefault.jpg)](https://www.youtube.com/watch?v=J_a9zdVQRmo "Watch the Demo")
+[![Watch on YouTube](https://img.youtube.com/vi/J_a9zdVQRmo/maxresdefault.jpg)](https://www.youtube.com/watch?v=J_a9zdVQRmo "Watch on YouTube")
 
 <br>
 <br>
@@ -101,7 +99,7 @@ A target group will route requests to the web servers we create. Our load balanc
 9. Click **Create target group**.
 
 ## Demo
-[![Watch the Demo on YouTube](https://img.youtube.com/vi/d5Uzm132PpM/maxresdefault.jpg)](https://www.youtube.com/watch?v=d5Uzm132PpM "Watch the Demo")
+[![Watch on YouTube](https://img.youtube.com/vi/d5Uzm132PpM/maxresdefault.jpg)](https://www.youtube.com/watch?v=d5Uzm132PpM "Watch on YouTube")
 
 <br>
 <br>
@@ -122,7 +120,7 @@ An application load balancer acts as the entry point for traffic to our web serv
 11. Leave every other config as default and click **Create load balancer**.
 
 ## Demo
-[![Watch the Demo on YouTube](https://img.youtube.com/vi/JVyPOaC1QII/maxresdefault.jpg)](https://www.youtube.com/watch?v=JVyPOaC1QII "Watch the Demo")
+[![Watch on YouTube](https://img.youtube.com/vi/JVyPOaC1QII/maxresdefault.jpg)](https://www.youtube.com/watch?v=JVyPOaC1QII "Watch on YouTube")
 
 <br>
 <br>
@@ -151,7 +149,7 @@ The auto scaling group configures and controls how your application scales autom
 16. **Create Auto Scaling Group**.
 
 ## Demo
-[![Watch the Demo on YouTube](https://img.youtube.com/vi/miOEZZcFtAI/maxresdefault.jpg)](https://www.youtube.com/watch?v=miOEZZcFtAI "Watch the Demo")
+[![Watch on YouTube](https://img.youtube.com/vi/miOEZZcFtAI/maxresdefault.jpg)](https://www.youtube.com/watch?v=miOEZZcFtAI "Watch on YouTube")
 
 <br>
 <br>
