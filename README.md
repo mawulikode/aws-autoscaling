@@ -152,7 +152,6 @@ The auto scaling group configures and controls how your application scales autom
 [![Watch on YouTube](https://img.youtube.com/vi/miOEZZcFtAI/maxresdefault.jpg)](https://www.youtube.com/watch?v=miOEZZcFtAI "Watch on YouTube")
 
 <br>
-<br>
 
 Once you successfully create your autoscaling group, you should see two new instances in the EC2 console. This is because we specified a desired count of 2. Also note that they are automatically placed one in each AZ to support high availability.
 
@@ -186,7 +185,7 @@ To ensure all incoming HTTP traffic goes through the load balancer, we will upda
 
 <br>
 
-![ALB at work!](https://mawuli-share-bucket.s3.us-east-1.amazonaws.com/blog-demos/autoscaling/autoscaling-alb-demo.gif)
+<img src="https://mawuli-share-bucket.s3.us-east-1.amazonaws.com/blog-demos/autoscaling/autoscaling-alb-demo.gif" alt="Funny Cat" width="800" height="150">
 
 2. After launching the desired number of instances, a bash script will run in the background to increase CPU utilization to 50%. This will trigger a scale out action.
 
