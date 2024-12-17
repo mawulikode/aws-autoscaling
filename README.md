@@ -6,13 +6,10 @@ This tutorial walks you through the process of creating web servers, managed by 
 Errors or corrections? Contact [mawulidenteh@gmail.com](mailto:mawulidenteh@gmail.com).
 
 <br>
-<br>
-
 
 ## Architecture Diagram
 ![](https://mawuli-share-bucket.s3.us-east-1.amazonaws.com/blog-demos/autoscaling/autoscaling-architecture-diagram.png)
 
-<br>
 <br>
 
 ## 1. Create a VPC
@@ -33,7 +30,6 @@ A VPC is an isolated, private network you can create to run your workloads. You 
 ## Demo
 [![Watch on YouTube](https://img.youtube.com/vi/9MKsavNn_pQ/maxresdefault.jpg)](https://www.youtube.com/watch?v=9MKsavNn_pQ "Watch on YouTube")
 
-<br>
 <br>
 
 ## 2. Create a Launch Template
@@ -83,7 +79,6 @@ nohup /home/ec2-user/start_stress.sh > /home/ec2-user/start_stress.log 2>&1 &
 [![Watch on YouTube](https://img.youtube.com/vi/J_a9zdVQRmo/maxresdefault.jpg)](https://www.youtube.com/watch?v=J_a9zdVQRmo "Watch on YouTube")
 
 <br>
-<br>
 
 ## 3. Create Target Group
 A target group will route requests to the web servers we create. Our load balancer will need this target group to know what set of servers to distribute traffic to. Our auto scaling group will also be associated with this target group so it launches our servers into the target group.
@@ -101,7 +96,6 @@ A target group will route requests to the web servers we create. Our load balanc
 ## Demo
 [![Watch on YouTube](https://img.youtube.com/vi/d5Uzm132PpM/maxresdefault.jpg)](https://www.youtube.com/watch?v=d5Uzm132PpM "Watch on YouTube")
 
-<br>
 <br>
 
 ## 4. Create Load Balancer
@@ -122,7 +116,6 @@ An application load balancer acts as the entry point for traffic to our web serv
 ## Demo
 [![Watch on YouTube](https://img.youtube.com/vi/JVyPOaC1QII/maxresdefault.jpg)](https://www.youtube.com/watch?v=JVyPOaC1QII "Watch on YouTube")
 
-<br>
 <br>
 
 ## 5. Create Auto Scaling Group
@@ -155,8 +148,6 @@ The auto scaling group configures and controls how your application scales autom
 
 Once you successfully create your autoscaling group, you should see two new instances in the EC2 console. This is because we specified a desired count of 2. Also note that they are automatically placed one in each AZ to support high availability.
 
-<br>
-
 ![](https://mawuli-share-bucket.s3.us-east-1.amazonaws.com/blog-demos/autoscaling/two-instances-after-launch.png)
 
 <br>
@@ -174,8 +165,6 @@ To ensure all incoming HTTP traffic goes through the load balancer, we will upda
 4. You have successfully restricted traffic going to the servers to the load balancer.
 5. You should no longer be able to access your web server using the server IPs or DNS names. You should now be able to use the load balancer DNS name to access the servers. Test this out.
 
-<br>
-
 ![](https://mawuli-share-bucket.s3.us-east-1.amazonaws.com/blog-demos/autoscaling/edit-alb-sg.png)
 
 <br>
@@ -183,9 +172,9 @@ To ensure all incoming HTTP traffic goes through the load balancer, we will upda
 ## Observations
 1. From the details tab of the load balancer, copy the DNS name and paste in a new tab. Refresh the tab and note the changing hostnames with every refresh. That's the load balancer alternating traffic between its target web servers.
 
-<br>
+<img src="https://mawuli-share-bucket.s3.us-east-1.amazonaws.com/blog-demos/autoscaling/autoscaling-alb-demo.gif" alt="ALB at work" width="800" height="150">
 
-<img src="https://mawuli-share-bucket.s3.us-east-1.amazonaws.com/blog-demos/autoscaling/autoscaling-alb-demo.gif" alt="Funny Cat" width="800" height="150">
+<br>
 
 2. After launching the desired number of instances, a bash script will run in the background to increase CPU utilization to 50%. This will trigger a scale out action.
 
@@ -194,8 +183,6 @@ This should lead to a maximum number of 4 instances being available to serve web
 When the script stops running, a scale in action should equally be triggered to reduce the instances back to the desired number.
 
 It takes about an hour to observe this.
-
-<br>
 
 ![](https://mawuli-share-bucket.s3.us-east-1.amazonaws.com/blog-demos/autoscaling/four-instances-at-peak.png)
 
