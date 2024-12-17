@@ -9,10 +9,11 @@ Errors or corrections? Contact [mawulidenteh@gmail.com](mailto:mawulidenteh@gmai
 
 
 ## Architecture Diagram
-![](./images/autoscale-diagram2-Page-1.png)
+![](https://mawuli-share-bucket.s3.us-east-1.amazonaws.com/blog-demos/autoscaling/autoscale-diagram2-Page-1.png)
 
+---
 
-## Create a VPC
+## 1. Create a VPC
 A VPC is an isolated, private network you can create to run your workloads. You have complete control over your VPC when you create one.
 
 1. Click on [Create VPC](https://eu-west-1.console.aws.amazon.com/vpc/home?region=eu-west-1#CreateVpc:createMode=vpcWithResources) from the VPC Dashboard to create a new VPC.
@@ -30,10 +31,9 @@ A VPC is an isolated, private network you can create to run your workloads. You 
 ## Demo
 [![Watch the Demo on YouTube](https://img.youtube.com/vi/9MKsavNn_pQ/maxresdefault.jpg)](https://www.youtube.com/watch?v=9MKsavNn_pQ "Watch the Demo")
 
-**[Click here to watch the demo](https://www.youtube.com/watch?v=9MKsavNn_pQ)**
+---
 
-
-## Create a Launch Template
+## 2. Create a Launch Template
 
 The launch template will serve as the blueprint for creating the exact type of server we need to meet our web server demands. A launch template can be modified to create new versions when you need to change a configuration.
 
@@ -77,9 +77,9 @@ nohup /home/ec2-user/start_stress.sh > /home/ec2-user/start_stress.log 2>&1 &
 ## Demo
 [![Watch the Demo on YouTube](https://img.youtube.com/vi/J_a9zdVQRmo/maxresdefault.jpg)](https://www.youtube.com/watch?v=J_a9zdVQRmo "Watch the Demo")
 
-**[Click here to watch the demo](https://www.youtube.com/watch?v=J_a9zdVQRmo)**
+---
 
-## Create Target Group
+## 3. Create Target Group
 A target group will route requests to the web servers we create. Our load balancer will need this target group to know what set of servers to distribute traffic to. Our auto scaling group will also be associated with this target group so it launches our servers into the target group.
 
 1. Click on [Create target group](https://eu-west-1.console.aws.amazon.com/ec2/home?region=eu-west-1#CreateTargetGroup:) from the EC2 console to create a target group.
@@ -95,9 +95,9 @@ A target group will route requests to the web servers we create. Our load balanc
 ## Demo
 [![Watch the Demo on YouTube](https://img.youtube.com/vi/d5Uzm132PpM/maxresdefault.jpg)](https://www.youtube.com/watch?v=d5Uzm132PpM "Watch the Demo")
 
-**[Click here to watch the demo](https://www.youtube.com/watch?v=d5Uzm132PpM)**
+---
 
-## Create Load Balancer
+## 4. Create Load Balancer
 An application load balancer acts as the entry point for traffic to our web servers. Instead of allowing users to access our application directly, we will use the load balancer to distribute traffic equally among our autoscaling group of web servers. This is better for load management, security and reliability of our application.
 
 1. Click on [Create load balancer](https://eu-west-1.console.aws.amazon.com/ec2/home?region=eu-west-1#SelectCreateELBWizard:) from the EC2 console to create a load balancer
@@ -115,13 +115,9 @@ An application load balancer acts as the entry point for traffic to our web serv
 ## Demo
 [![Watch the Demo on YouTube](https://img.youtube.com/vi/JVyPOaC1QII/maxresdefault.jpg)](https://www.youtube.com/watch?v=JVyPOaC1QII "Watch the Demo")
 
-**[Click here to watch the demo](https://www.youtube.com/watch?v=JVyPOaC1QII)**
+---
 
-
-
-
-
-## Create Auto Scaling Group
+## 5. Create Auto Scaling Group
 The auto scaling group configures and controls how your application scales automatically in response to varying traffic situations.
 
 1. Click on [Create Auto Scaling group](https://eu-west-1.console.aws.amazon.com/ec2/home?region=eu-west-1#CreateAutoScalingGroup:) from the EC2 console to create an auto scaling group.
@@ -147,11 +143,11 @@ The auto scaling group configures and controls how your application scales autom
 ## Demo
 [![Watch the Demo on YouTube](https://img.youtube.com/vi/miOEZZcFtAI/maxresdefault.jpg)](https://www.youtube.com/watch?v=miOEZZcFtAI "Watch the Demo")
 
-**[Click here to watch the demo](https://www.youtube.com/watch?v=miOEZZcFtAI)**
-
-
+---
 
 Once you successfully create your autoscaling group, you should see two new instances in the EC2 console. This is because we specified a desired count of 2. Also note that they are automatically placed one in each AZ to support high availability.
+
+![](https://mawuli-share-bucket.s3.us-east-1.amazonaws.com/blog-demos/autoscaling/Screenshot+2024-12-17+at+10.02.02%E2%80%AFAM.png)
 
 
 ## Restrict web traffic to servers
@@ -168,7 +164,7 @@ To ensure all incoming HTTP traffic goes through the load balancer, we will upda
 4. You have successfully restricted traffic going to the servers to the load balancer.
 5. You should no longer be able to access your web server using the server IPs or DNS names. You should now be able to use the load balancer DNS name to access the servers. Test this out.
 
-![](images/Screenshot%202024-12-17%20at%2010.01.13 AM.png)
+![](https://mawuli-share-bucket.s3.us-east-1.amazonaws.com/blog-demos/autoscaling/Screenshot+2024-12-17+at+10.01.13%E2%80%AFAM.png)
 
 ## Observing Autoscaling
 After launching the desired number of 2 instances, a bash script will run in the background to increase CPU utilization to 50%. This will trigger a scale out action.
@@ -179,7 +175,7 @@ When the script stops running, a scale in action should equally be triggered to 
 
 It takes about an hour to observe this.
 
-![](images/Screenshot%202024-12-17%20at%204.37.21 PM.png)
+![](https://mawuli-share-bucket.s3.us-east-1.amazonaws.com/blog-demos/autoscaling/Screenshot+2024-12-17+at+4.37.21%E2%80%AFPM.png)
 
 ## Conclusion
 You have built a load-balanced and highly available web application that auto-scales based on a target of CPU utilization.
