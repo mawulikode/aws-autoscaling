@@ -10,7 +10,7 @@ Errors or corrections? Contact [mawulidenteh@gmail.com](mailto:mawulidenteh@gmai
 
 
 ## Architecture Diagram
-![](https://mawuli-share-bucket.s3.us-east-1.amazonaws.com/blog-demos/autoscaling/autoscale-diagram2-Page-1.png)
+![](https://mawuli-share-bucket.s3.us-east-1.amazonaws.com/blog-demos/autoscaling/autoscaling-architecture-diagram.png)
 
 <br>
 <br>
@@ -158,7 +158,7 @@ Once you successfully create your autoscaling group, you should see two new inst
 
 <br>
 
-![](https://mawuli-share-bucket.s3.us-east-1.amazonaws.com/blog-demos/autoscaling/Screenshot+2024-12-17+at+10.02.02%E2%80%AFAM.png)
+![](https://mawuli-share-bucket.s3.us-east-1.amazonaws.com/blog-demos/autoscaling/two-instances-after-launch.png)
 
 <br>
 
@@ -177,12 +177,18 @@ To ensure all incoming HTTP traffic goes through the load balancer, we will upda
 
 <br>
 
-![](https://mawuli-share-bucket.s3.us-east-1.amazonaws.com/blog-demos/autoscaling/Screenshot+2024-12-17+at+10.01.13%E2%80%AFAM.png)
+![](https://mawuli-share-bucket.s3.us-east-1.amazonaws.com/blog-demos/autoscaling/edit-alb-sg.png)
 
 <br>
 
-## Observing Autoscaling
-After launching the desired number of 2 instances, a bash script will run in the background to increase CPU utilization to 50%. This will trigger a scale out action.
+## Observations
+1. From the details tab of the load balancer, copy the DNS name and paste in a new tab. Refresh the tab and note the changing hostnames with every refresh. That's the load balancer alternating traffic between its target web servers.
+
+<br>
+
+![ALB at work!](https://mawuli-share-bucket.s3.us-east-1.amazonaws.com/blog-demos/autoscaling/autoscaling-alb-demo.gif)
+
+2. After launching the desired number of instances, a bash script will run in the background to increase CPU utilization to 50%. This will trigger a scale out action.
 
 This should lead to a maximum number of 4 instances being available to serve web traffic.
 
@@ -192,7 +198,7 @@ It takes about an hour to observe this.
 
 <br>
 
-![](https://mawuli-share-bucket.s3.us-east-1.amazonaws.com/blog-demos/autoscaling/Screenshot+2024-12-17+at+4.37.21%E2%80%AFPM.png)
+![](https://mawuli-share-bucket.s3.us-east-1.amazonaws.com/blog-demos/autoscaling/four-instances-at-peak.png)
 
 ## Conclusion
 You have built a load-balanced and highly available web application that auto-scales based on a target of CPU utilization.
