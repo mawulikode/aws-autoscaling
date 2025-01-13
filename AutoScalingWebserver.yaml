@@ -1,0 +1,244 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Creates a typical AutoScaling setup for a web server using EC2 launch template, AutoScaling group, Target group and Application load balancer.
+
+Parameters:
+  # WebServerRole:
+  #   Type: String
+  #   Description: Optional ARN of the IAM role to associate with EC2 instances
+
+  WebServerAMI:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
+    Description: SSM parameter to fetch the latest Amazon Linux 2023 AMI ID
+
+  WebServerInstanceType:
+    Description: The type of the EC2 instance
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t2.small
+      - t2.medium
+
+  CPUPolicyTargetValue:
+    Type: Number
+    Default: 50
+    Description: The target utilization for the CPU metric
+
+Resources:
+  # VPC
+  WebserverVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: "autoscaling-demo-vpc"
+
+  # Internet Gateway
+  WebserverIGW:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: "autoscaling-demo-igw"
+
+  # IGW Attachment
+  WebserverIGWAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref WebserverVPC
+      InternetGatewayId: !Ref WebserverIGW
+
+  # Public Subnets
+  WebserverSubnetPublic1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref WebserverVPC
+      CidrBlock: 10.0.0.0/20
+      AvailabilityZone: !Select [0, !GetAZs '']
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: "autoscaling-demo-subnet1-public"
+
+  WebserverSubnetPublic2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref WebserverVPC
+      CidrBlock: 10.0.16.0/20
+      AvailabilityZone: !Select [1, !GetAZs '']
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: "autoscaling-demo-subnet2-public"
+
+  # Route Table and Routes
+  WebserverPublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref WebserverVPC
+      Tags:
+        - Key: Name
+          Value: "autoscaling-demo-rtb-public"
+
+  WebserverPublicRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref WebserverPublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref WebserverIGW
+
+  WebserverSubnetPublic1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref WebserverSubnetPublic1
+      RouteTableId: !Ref WebserverPublicRouteTable
+
+  WebserverSubnetPublic2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref WebserverSubnetPublic2
+      RouteTableId: !Ref WebserverPublicRouteTable
+
+  # Webserver Security Group
+  WebServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable HTTP and SSH access
+      VpcId: !Ref WebserverVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: "autoscaling-demo-sg"
+
+  # Launch Template
+  WebServerLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName: autoscaling-demo-launch-template
+      LaunchTemplateData:
+        ImageId: !Ref WebServerAMI
+        InstanceType: !Ref WebServerInstanceType
+        SecurityGroupIds:
+          - !Ref WebServerSecurityGroup
+        # IamInstanceProfile:
+        #   Arn: !Ref WebServerRole
+        UserData:
+          Fn::Base64: |
+            #!/bin/bash
+            yum update -y
+            yum install -y httpd
+            systemctl start httpd
+            systemctl enable httpd
+            echo "<h1>Hello World from $(hostname -f)</h1>" > /var/www/html/index.html
+            systemctl restart httpd
+            amazon-linux-extras install epel -y
+            yum install -y stress
+            cat << 'EOF' > /home/ec2-user/start_stress.sh
+            #!/bin/bash
+            sleep 240
+            vcpus=$(nproc)
+            workers=$vcpus
+            stress --cpu "$workers" --timeout 300
+            EOF
+            chmod +x /home/ec2-user/start_stress.sh
+            nohup /home/ec2-user/start_stress.sh > /home/ec2-user/start_stress.log 2>&1 &
+
+  # Load balancer
+  WebServerALB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: autoscaling-demo-alb
+      Subnets:
+        - !Ref WebserverSubnetPublic1
+        - !Ref WebserverSubnetPublic2
+      SecurityGroups:
+        - !Ref WebServerSecurityGroup
+      Scheme: internet-facing
+      LoadBalancerAttributes:
+      - Key: idle_timeout.timeout_seconds
+        Value: '60'
+      Tags:
+        - Key: Name
+          Value: "autoscaling-demo-alb"
+
+  # Listener
+  WebServerListener:
+    Type: "AWS::ElasticLoadBalancingV2::Listener"
+    Properties:
+      DefaultActions:
+        - Type: "forward"
+          TargetGroupArn: !Ref WebServerTargetGroup
+      LoadBalancerArn: !Ref WebServerALB
+      Port: 80
+      Protocol: "HTTP"
+
+  # Target Group
+  WebServerTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: autoscaling-demo-tg
+      Port: 80
+      Protocol: HTTP
+      VpcId: !Ref WebserverVPC
+      HealthCheckPath: /
+      TargetType: instance
+      HealthCheckEnabled: true
+      HealthCheckIntervalSeconds: 30
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 5
+      UnhealthyThresholdCount: 2
+      Matcher:
+        HttpCode: 200
+      Tags:
+        - Key: Name
+          Value: "autoscaling-demo-tg"
+
+  # AutoScaling Group
+  AutoScalingDemoASG:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AutoScalingGroupName: autoscaling-demo-asg
+      LaunchTemplate:
+        LaunchTemplateId: !Ref WebServerLaunchTemplate
+        Version: !GetAtt WebServerLaunchTemplate.LatestVersionNumber
+      MaxSize: 4
+      MinSize: 1
+      DesiredCapacity: 2
+      HealthCheckType: ELB
+      HealthCheckGracePeriod: 120
+      TerminationPolicies:
+        - OldestLaunchTemplate
+      MaxInstanceLifetime: 86400
+      VPCZoneIdentifier:
+        - !Ref WebserverSubnetPublic1
+        - !Ref WebserverSubnetPublic2
+      TargetGroupARNs:
+           - !Ref WebServerTargetGroup
+      MetricsCollection:
+        - Granularity: 1Minute
+          Metrics:
+            - GroupMinSize
+            - GroupMaxSize
+      Tags:
+        - Key: Name
+          Value: autoscaling-demo-webserver
+          PropagateAtLaunch: true
+
+  # Scaling Policy
+  AutoScalingDemoPolicy:
+    Type: AWS::AutoScaling::ScalingPolicy
+    Properties:
+      AutoScalingGroupName: !Ref AutoScalingDemoASG
+      PolicyType: TargetTrackingScaling
+      TargetTrackingConfiguration:
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ASGAverageCPUUtilization
+        TargetValue: !Ref CPUPolicyTargetValue
