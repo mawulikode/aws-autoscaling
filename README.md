@@ -25,11 +25,7 @@ A VPC is an isolated, private network you can create to run your workloads. You 
 10. Leave all other settings as default.
 11. Click **Create VPC**.
 
-## Demo
-[![Watch on YouTube](https://img.youtube.com/vi/9MKsavNn_pQ/maxresdefault.jpg)](https://www.youtube.com/watch?v=9MKsavNn_pQ "Watch on YouTube")
-
-<br>
-
+##
 ## 2. Create a Launch Template
 
 The launch template will serve as the blueprint for creating the exact type of server we need to meet our web server demands. A launch template can be modified to create new versions when you need to change a configuration.
@@ -72,12 +68,7 @@ chmod +x /home/ec2-user/start_stress.sh
 nohup /home/ec2-user/start_stress.sh > /home/ec2-user/start_stress.log 2>&1 &
 
 ```
-
-## Demo
-[![Watch on YouTube](https://img.youtube.com/vi/J_a9zdVQRmo/maxresdefault.jpg)](https://www.youtube.com/watch?v=J_a9zdVQRmo "Watch on YouTube")
-
-<br>
-
+##
 ## 3. Create Target Group
 A target group will route requests to the web servers we create. Our load balancer will need this target group to know what set of servers to distribute traffic to. Our auto scaling group will also be associated with this target group so it launches our servers into the target group.
 
@@ -91,11 +82,7 @@ A target group will route requests to the web servers we create. Our load balanc
 8. Register Targets: Leave as is.
 9. Click **Create target group**.
 
-## Demo
-[![Watch on YouTube](https://img.youtube.com/vi/d5Uzm132PpM/maxresdefault.jpg)](https://www.youtube.com/watch?v=d5Uzm132PpM "Watch on YouTube")
-
-<br>
-
+##
 ## 4. Create Load Balancer
 An application load balancer acts as the entry point for traffic to our web servers. Instead of allowing users to access our application directly, we will use the load balancer to distribute traffic equally among our autoscaling group of web servers. This is better for load management, security and reliability of our application.
 
@@ -111,11 +98,7 @@ An application load balancer acts as the entry point for traffic to our web serv
 10. Listeners and routing: Leave protocol and port as **HTTP:80**. Select the target group you created as target group.
 11. Leave every other config as default and click **Create load balancer**.
 
-## Demo
-[![Watch on YouTube](https://img.youtube.com/vi/JVyPOaC1QII/maxresdefault.jpg)](https://www.youtube.com/watch?v=JVyPOaC1QII "Watch on YouTube")
-
-<br>
-
+##
 ## 5. Create Auto Scaling Group
 The auto scaling group configures and controls how your application scales automatically in response to varying traffic situations.
 
@@ -139,8 +122,7 @@ The auto scaling group configures and controls how your application scales autom
 15. Target Value: **50%**.
 16. **Create Auto Scaling Group**.
 
-## Demo
-[![Watch on YouTube](https://img.youtube.com/vi/miOEZZcFtAI/maxresdefault.jpg)](https://www.youtube.com/watch?v=miOEZZcFtAI "Watch on YouTube")
+##
 
 <br>
 
@@ -148,8 +130,7 @@ Once you successfully create your autoscaling group, you should see two new inst
 
 ![](https://d27cfdmch0nybz.cloudfront.net/blog-demos/autoscaling/images/two-instances-after-launch.png)
 
-<br>
-
+##
 ## Restrict web traffic to servers
 
 With the current design, users can directly access our web server using its IP address. We don't want that. That is why we created a load balancer.
@@ -165,8 +146,7 @@ To ensure all incoming HTTP traffic goes through the load balancer, we will upda
 
 ![](https://d27cfdmch0nybz.cloudfront.net/blog-demos/autoscaling/images/edit-alb-sg.png)
 
-<br>
-
+##
 ## Observations
 1. From the details tab of the load balancer, copy the DNS name and paste in a new tab. Refresh the tab and note the changing hostnames with every refresh. That's the load balancer alternating traffic between its target web servers.
 
@@ -184,6 +164,7 @@ It takes about an hour to observe this.
 
 ![](https://d27cfdmch0nybz.cloudfront.net/blog-demos/autoscaling/images/four-instances-at-peak.png)
 
+##
 ## Conclusion
 You have built a load-balanced and highly available web application that auto-scales based on a target of CPU utilization.
 
